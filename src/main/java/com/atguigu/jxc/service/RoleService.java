@@ -21,5 +21,5 @@ public interface RoleService {
 
     ServiceVO delete(Integer roleId);
 
-    ServiceVO setMenu(Integer roleId,String menus);
+    ServiceVO setMenu(Integer roleId, String menus);
 }

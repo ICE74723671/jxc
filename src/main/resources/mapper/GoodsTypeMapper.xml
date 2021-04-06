@@ -35,5 +35,37 @@
         WHERE goods_type_id = #{goodsTypeId}
     </update>
 
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT
+            goods_type_id,
+            goods_type_name,
+            p_id,
+            goods_type_state
+        FROM
+            t_goods_type
+    </select>
+
+    <select id="goodsType" resultType="java.lang.Integer">
+        SELECT
+            goods_type_id
+        FROM
+            t_goods_type
+        WHERE
+            p_id = #{goodsTypeId}
+    </select>
+
+    <insert id="addGoodsType">
+        INSERT INTO t_goods_type
+        VALUES
+	        (NULL, #{goodsTypeName}, #{pId}, 0)
+    </insert>
+
+    <delete id="deleteGoodsType">
+        DELETE
+        FROM
+	        t_goods_type
+        WHERE
+	        goods_type_id = #{goodsTypeId}
+    </delete>
 
 </mapper>

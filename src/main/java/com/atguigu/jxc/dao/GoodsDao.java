@@ -1,6 +1,9 @@
 package com.atguigu.jxc.dao;
 
 import com.atguigu.jxc.entity.Goods;
+import com.atguigu.jxc.entity.GoodsType;
+import com.atguigu.jxc.vo.GoodsTypeVo;
+import com.atguigu.jxc.vo.GoodsVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -10,15 +13,23 @@ import java.util.List;
  */
 public interface GoodsDao {
 
-
     String getMaxCode();
 
+    List<Goods> goodsList();
 
-    List<Goods> listInventory(@Param("pages") Integer pages, @Param("rows") Integer rows, @Param("codeOrName") String codeOrName, @Param("goodsTypeId") Integer goodsTypeId);
+    Integer goodsTotal();
 
+    List<Goods> goodsListById(Integer goodsTypeId);
 
-    List<Goods> goodsList(@Param("pages") Integer pages, @Param("rows") Integer rows, @Param("goodsName") String goodsName, @Param("goodsTypeId") Integer goodsTypeId);
+    Integer goodsTotalById(Integer goodsTypeId);
 
-    List<Goods> listAlarm();
+    List<Goods> getGoodByIds(List<Integer> ids);
 
+    Integer addGoods(Goods goods);
+
+    Integer updateGoods(Goods goods);
+
+    Integer deleteGoods(Integer goodsId);
+
+    List<Goods> getGoodsByName(String value);
 }

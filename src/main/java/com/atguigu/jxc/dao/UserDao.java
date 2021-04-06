@@ -14,7 +14,7 @@ public interface UserDao {
     User findUserByName(String userName);
 
     // 根据用户名称模糊分页查询用户列表
-    List<User> getUserList(@Param("offSet") Integer offSet,@Param("pageRow") Integer pageRow,@Param("userName") String userName);
+    List<User> getUserList(@Param("offSet") Integer offSet, @Param("pageRow") Integer pageRow, @Param("userName") String userName);
 
     // 根据用户名称模糊查询用户列表的数量
     Integer getUserCount(@Param("userName") String userName);

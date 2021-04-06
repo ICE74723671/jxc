@@ -3,25 +3,107 @@ package com.atguigu.jxc.controller;
 import com.atguigu.jxc.domain.ServiceVO;
 import com.atguigu.jxc.entity.Goods;
 import com.atguigu.jxc.service.GoodsService;
+import com.atguigu.jxc.util.StringUtil;
+import com.atguigu.jxc.vo.GoodsVo;
+import com.atguigu.jxc.vo.QueryPageBean;
+import com.google.gson.Gson;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * @description 商品信息Controller
  */
 @RestController
-@RequestMapping("goods")
 public class GoodsController {
 
     @Autowired
     private GoodsService goodsService;
+
+    /**
+     * 删除商品
+     *
+     * @param goodsId
+     * @return
+     */
+    @PostMapping("goods/delete")
+    public ServiceVO deleteGoods(Integer goodsId) {
+        return goodsService.deleteGoods(goodsId);
+    }
+
+    /**
+     * 新增或修改商品
+     *
+     * @param goods
+     * @return
+     */
+    @PostMapping("goods/save")
+    public ServiceVO addOrUpdateGoods(Goods goods) {
+        return goodsService.addOrUpdateGoods(goods);
+    }
+
+    /**
+     * 删除分类
+     *
+     * @param goodsTypeId
+     * @return
+     */
+    @PostMapping("goodsType/delete")
+    public ServiceVO deleteGoodsType(Integer goodsTypeId) {
+        return goodsService.deleteGoodsType(goodsTypeId);
+    }
+
+    /**
+     * 新增分类
+     *
+     * @param goodsTypeName
+     * @param pId
+     * @return
+     */
+    @PostMapping("goodsType/save")
+    public ServiceVO addGoodsType(String goodsTypeName, Integer pId) {
+        return goodsService.addGoodsType(goodsTypeName, pId);
+    }
+
+    /**
+     * 分页展示商品信息
+     *
+     * @param goodsTypeId
+     * @return
+     */
+    @PostMapping("goods/list")
+    public Map<String, Object> goodsList(String goodsName, Integer goodsTypeId) {
+        Map<String, Object> map = new HashMap<>();
+        GoodsVo goodsVo = goodsService.goodsList(goodsName, goodsTypeId);
+        map.put("total", goodsVo.getTotal());
+        map.put("rows", goodsVo.getRows());
+        return map;
+    }
+
+    /**
+     * 查询所有商品单位
+     *
+     * @return
+     */
+    @PostMapping("unit/list")
+    public Map<String, Object> queryUnits() {
+        return goodsService.queryUnits();
+    }
+
+    /**
+     * 查询商品所有分类
+     *
+     * @return
+     */
+    @PostMapping("goodsType/loadGoodsType")
+    public String queryCategories() {
+        Gson gson = new Gson();
+        return gson.toJson(goodsService.queryCategories());
+    }
+
 
     /**
      * 分页查询商品库存信息
@@ -31,17 +113,6 @@ public class GoodsController {
      * @param goodsTypeId 商品类别ID
      * @return
      */
-    @PostMapping("listInventory")
-    public Map<String,Object> listInventory(Integer page, Integer rows, String codeOrName, Integer goodsTypeId){
-        List<Goods> goods = goodsService.listInventory(page,rows,codeOrName,goodsTypeId);
-        int size = goods.size();
-        System.out.println("size = " + size);
-        Map<String,Object> map = new HashMap<>();
-        map.put("rows",goods);
-        map.put("total",size);
-
-          return map;
-    }
 
 
     /**
@@ -52,19 +123,11 @@ public class GoodsController {
      * @param goodsTypeId 商品类别ID
      * @return
      */
-    @PostMapping("list")
-    public Map<String,Object> goodsList(Integer page, Integer rows, String goodsName, Integer goodsTypeId){
-        Map<String,Object> map = new HashMap<>();
-        List<Goods> goods = goodsService.goodsList(page,rows,goodsName,goodsTypeId);
-        int size = goods.size();
-        map.put("total",size);
-        map.put("rows",goods);
-        return map;
-    }
 
 
     /**
      * 生成商品编码
+     *
      * @return
      */
     @RequestMapping("/getCode")
@@ -121,12 +184,5 @@ public class GoodsController {
      * 查询库存报警商品信息
      * @return
      */
-    @PostMapping("listAlarm")
-    public Map<String,Object> listAlarm(){
-        Map<String,Object> map = new HashMap<>();
-        List<Goods> goods = goodsService.listAlarm();
-        map.put("rows",goods);
-        return map;
-    }
 
 }

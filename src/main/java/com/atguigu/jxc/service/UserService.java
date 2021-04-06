@@ -16,7 +16,7 @@ public interface UserService {
 
     Map<String,Object> loadUserInfo(HttpSession session);
 
-    Map<String, Object> list(Integer page,Integer rows,String userName);
+    Map<String, Object> list(Integer page, Integer rows, String userName);
 
     ServiceVO save(User user);
 
