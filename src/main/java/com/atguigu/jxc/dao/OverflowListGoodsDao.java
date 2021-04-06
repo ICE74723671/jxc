@@ -11,4 +11,10 @@ public interface OverflowListGoodsDao {
 
     List<OverflowListGoods> goodsList(@Param("overflowListId") Integer overflowListId);
 
+    void saveOverflowList(OverflowList overflowList);
+
+    void saveOverFlowListGoods(OverflowListGoods overflowListGoods);
+
+    void setOverflowListId(@Param("overflowListId") Integer overflowListId,
+                           @Param("overflowListGoodsId") Integer overflowListGoodsId);
 }

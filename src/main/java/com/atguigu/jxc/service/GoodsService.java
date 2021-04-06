@@ -27,4 +27,8 @@ public interface GoodsService {
     ServiceVO addOrUpdateGoods(Goods goods);
 
     ServiceVO deleteGoods(Integer goodsId);
+
+    List<Goods> listInventory(Integer page, Integer rows, String codeOrName, Integer goodsTypeId);
+
+    List<Goods> listAlarm();
 }

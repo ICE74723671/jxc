@@ -32,4 +32,8 @@ public interface GoodsDao {
     Integer deleteGoods(Integer goodsId);
 
     List<Goods> getGoodsByName(String value);
+
+    List<Goods> listAlarm();
+
+    List<Goods> listInventory(@Param("pages") Integer pages, @Param("rows") Integer rows, @Param("codeOrName") String codeOrName, @Param("goodsTypeId") Integer goodsTypeId);
 }

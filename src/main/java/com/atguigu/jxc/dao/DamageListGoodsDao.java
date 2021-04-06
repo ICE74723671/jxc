@@ -10,4 +10,11 @@ public interface DamageListGoodsDao {
     List<DamageList> damageListGoods(@Param("sTime") String sTime,@Param("eTime") String eTime);
 
     List<DamageListGoods> goodsList(@Param("damageListId") Integer damageListId);
+
+    void saveDamageList(DamageList damageList);
+
+    void saveDamageListGoods(DamageListGoods damageListGoods);
+
+    void setDamageListGoodsId(@Param("damageListId") Integer damageListId,
+                              @Param("damageListGoodsId") Integer damageListGoodsId);
 }

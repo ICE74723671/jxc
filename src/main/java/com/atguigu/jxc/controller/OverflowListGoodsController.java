@@ -1,13 +1,16 @@
 package com.atguigu.jxc.controller;
 
+import com.atguigu.jxc.domain.ServiceVO;
 import com.atguigu.jxc.entity.OverflowList;
 import com.atguigu.jxc.entity.OverflowListGoods;
+import com.atguigu.jxc.entity.User;
 import com.atguigu.jxc.service.OverflowListGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +21,17 @@ public class OverflowListGoodsController {
 
     @Autowired
     OverflowListGoodsService overflowListGoodsService;
+
+    /**
+     * 新增报溢单
+     */
+    @RequestMapping("save")
+    public ServiceVO save(OverflowList overflowList, String overflowListGoodsStr, HttpSession session){
+        User user = (User) session.getAttribute("currentUser");
+        Integer userId = user.getUserId();
+        overflowList.setUserId(userId);
+        return overflowListGoodsService.save(overflowList,overflowListGoodsStr);
+    }
 
 
     /**

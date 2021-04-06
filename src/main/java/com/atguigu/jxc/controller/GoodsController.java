@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -113,6 +114,17 @@ public class GoodsController {
      * @param goodsTypeId 商品类别ID
      * @return
      */
+    @PostMapping("goods/listInventory")
+    public Map<String,Object> listInventory(Integer page, Integer rows, String codeOrName, Integer goodsTypeId){
+        List<Goods> goods = goodsService.listInventory(page,rows,codeOrName,goodsTypeId);
+        int size = goods.size();
+        System.out.println("size = " + size);
+        Map<String,Object> map = new HashMap<>();
+        map.put("rows",goods);
+        map.put("total",size);
+
+        return map;
+    }
 
 
     /**
@@ -184,5 +196,12 @@ public class GoodsController {
      * 查询库存报警商品信息
      * @return
      */
+    @PostMapping("goods/listAlarm")
+    public Map<String,Object> listAlarm(){
+        Map<String,Object> map = new HashMap<>();
+        List<Goods> goods = goodsService.listAlarm();
+        map.put("rows",goods);
+        return map;
+    }
 
 }

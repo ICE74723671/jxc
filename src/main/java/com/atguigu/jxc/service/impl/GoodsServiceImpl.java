@@ -41,6 +41,18 @@ public class GoodsServiceImpl implements GoodsService {
     private Integer amount = 0;
 
     @Override
+    public List<Goods> listAlarm() {
+        return goodsDao.listAlarm();
+    }
+
+    @Override
+    public List<Goods> listInventory(Integer page, Integer rows, String codeOrName, Integer goodsTypeId) {
+        int pages = (page - 1)*rows;
+        return goodsDao.listInventory(pages,rows,codeOrName,goodsTypeId);
+
+    }
+
+    @Override
     public ServiceVO getCode() {
 
         // 获取当前商品最大编码

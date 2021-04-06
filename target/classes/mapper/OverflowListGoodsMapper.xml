@@ -70,4 +70,35 @@
         </where>
     </select>
 
+    <insert id="saveOverflowList" useGeneratedKeys="true"
+            keyProperty="overflowListId" parameterType="com.atguigu.jxc.entity.OverflowList">
+        INSERT INTO
+        t_overflow_list(overflow_list_id,overflow_number,overflow_date,remarks,user_id)
+        VALUES
+        (#{overflowListId},#{overflowNumber},#{overflowDate},
+        #{remarks},#{userId})
+    </insert>
+
+    <insert id="saveOverFlowListGoods" useGeneratedKeys="true"
+            keyProperty="overflowListGoodsId"
+            parameterType="com.atguigu.jxc.entity.OverflowListGoods">
+        INSERT INTO
+        t_overflow_list_goods(overflow_list_goods_id,goods_id,goods_code,
+        goods_name,goods_model,goods_unit,
+        goods_num,price,total,overflow_list_id,goods_type_id)
+        VALUES
+        (#{overflowListGoodsId},#{goodsId},#{goodsCode},
+        #{goodsName},#{goodsModel},#{goodsUnit},
+        #{goodsNum},#{price},#{total},#{overflowListId},#{goodsTypeId})
+    </insert>
+
+    <update id="setOverflowListId"
+            parameterType="com.atguigu.jxc.entity.OverflowListGoods">
+        UPDATE
+        t_overflow_list_goods
+        SET
+        overflow_list_id = #{overflowListId}
+        WHERE
+        overflow_list_goods_id = #{overflowListGoodsId}
+    </update>
 </mapper>

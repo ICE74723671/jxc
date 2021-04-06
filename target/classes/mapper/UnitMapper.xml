@@ -5,18 +5,12 @@
 
 <mapper namespace="com.atguigu.jxc.dao.UnitDao">
 
-    <resultMap id="unitListMap" type="com.atguigu.jxc.entity.Unit">
-        <result column="unit_id" property="unitId" jdbcType="INTEGER"/>
-        <result column="unit_name" property="unitName" jdbcType="VARCHAR"/>
-    </resultMap>
-
-    <select id="unitList" resultMap="unitListMap">
+    <select id="queryUnits" resultType="com.atguigu.jxc.entity.Unit">
         SELECT
-        unit_id,
-        unit_name
+            unit_id unitId,
+            unit_name unitName
         FROM
-        t_unit
+            t_unit
     </select>
-
 
 </mapper>

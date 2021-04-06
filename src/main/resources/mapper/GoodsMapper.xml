@@ -24,11 +24,77 @@
         <result column="total" property="saleTotal" jdbcType="FLOAT"/>
     </resultMap>
 
+    <resultMap id="listInventoryMap" type="com.atguigu.jxc.entity.Goods">
+        <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+        <result column="goods_code" property="goodsCode" jdbcType="VARCHAR" />
+        <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+        <result column="inventory_quantity" property="inventoryQuantity" jdbcType="INTEGER" />
+        <result column="min_num" property="minNum" jdbcType="INTEGER" />
+        <result column="goods_model" property="goodsModel" jdbcType="VARCHAR" />
+        <result column="goods_producer" property="goodsProducer" jdbcType="VARCHAR" />
+        <result column="purchasing_price" property="purchasingPrice" jdbcType="REAL" />
+        <result column="last_purchasing_price" property="lastPurchasingPrice" jdbcType="REAL" />
+        <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+        <result column="selling_price" property="sellingPrice" jdbcType="REAL" />
+        <result column="state" property="state" jdbcType="INTEGER" />
+        <result column="goods_unit" property="goodsUnit" jdbcType="VARCHAR" />
+        <result column="goods_type_id" property="goodsTypeId" jdbcType="INTEGER" />
+        <result column="goods_type_name" property="goodsTypeName" jdbcType="VARCHAR" />
+        <result column="sale_total" property="saleTotal" jdbcType="INTEGER" />
+    </resultMap>
+
     <select id="getMaxCode" resultType="java.lang.String">
         SELECT
             MAX( goods_code )
         FROM
             t_goods
+    </select>
+
+    <resultMap id="listAlarmMap" type="com.atguigu.jxc.entity.Goods">
+        <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+        <result column="goods_code" property="goodsCode" jdbcType="VARCHAR" />
+        <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+        <result column="inventory_quantity" property="inventoryQuantity" jdbcType="INTEGER" />
+        <result column="min_num" property="minNum" jdbcType="INTEGER" />
+        <result column="goods_model" property="goodsModel" jdbcType="VARCHAR" />
+        <result column="goods_producer" property="goodsProducer" jdbcType="VARCHAR" />
+        <result column="purchasing_price" property="purchasingPrice" jdbcType="REAL" />
+        <result column="last_purchasing_price" property="lastPurchasingPrice" jdbcType="REAL" />
+        <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+        <result column="selling_price" property="sellingPrice" jdbcType="REAL" />
+        <result column="state" property="state" jdbcType="INTEGER" />
+        <result column="goods_unit" property="goodsUnit" jdbcType="VARCHAR" />
+        <result column="goods_type_id" property="goodsTypeId" jdbcType="INTEGER" />
+        <result column="goods_type_name" property="goodsTypeName" jdbcType="VARCHAR" />
+        <result column="sale_total" property="saleTotal" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="listAlarm" resultMap="listAlarmMap">
+        SELECT
+        t1.goods_id,
+        t1.goods_code,
+        t1.goods_name,
+        t1.inventory_quantity,
+        t1.last_purchasing_price,
+        t1.min_num,
+        t1.goods_model,
+        t1.goods_producer,
+        t1.purchasing_price,
+        t1.remarks,
+        t1.selling_price,
+        t1.state,
+        t1.goods_unit,
+        t1.goods_type_id,
+        t2.goods_type_name,
+        t3.goods_num sale_total
+        FROM
+        t_goods t1
+        LEFT JOIN t_goods_type t2
+        ON t1.goods_type_id = t2.goods_type_id
+        left JOIN t_sale_list_goods t3
+        ON t1.goods_id = t3.goods_id
+        WHERE
+        t1.min_num > t1.inventory_quantity
     </select>
 
     <select id="goodsList" resultMap="BaseResultMap">
@@ -147,6 +213,43 @@
             goods_id = #{goodsId}
     </delete>
 
+    <select id="listInventory" resultMap="listInventoryMap">
+        SELECT
+        t1.goods_id,
+        t1.goods_code,
+        t1.goods_name,
+        t1.inventory_quantity,
+        t1.last_purchasing_price,
+        t1.min_num,
+        t1.goods_model,
+        t1.goods_producer,
+        t1.purchasing_price,
+        t1.remarks,
+        t1.selling_price,
+        t1.state,
+        t1.goods_unit,
+        t1.goods_type_id,
+        t2.goods_type_name,
+        t3.goods_num sale_total
+        FROM
+        t_goods t1
+        LEFT JOIN t_goods_type t2
+        ON t1.goods_type_id = t2.goods_type_id
+        left JOIN t_sale_list_goods t3
+        ON t1.goods_id = t3.goods_id
+        <where>
+            <if test="codeOrName != null and codeOrName != ''">
+                and t1.goods_code = #{codeOrName}
+            </if>
+            <if test="codeOrName != null and codeOrName != ''">
+                or t1.goods_name like concat('%',#{codeOrName},'%')
+            </if>
+            <!--                <if test="goodsTypeId ！= null and goodsTypeId != ''">-->
+            <!--                    and goods_type_id = #{goodsTypeId}-->
+            <!--                </if>-->
+        </where>
+    </select>
+
     <select id="getGoodsByName" resultMap="BaseResultMap">
         SELECT
             good.goods_id ,
@@ -175,5 +278,7 @@
             </if>
         </where>
     </select>
+
+
 
 </mapper>

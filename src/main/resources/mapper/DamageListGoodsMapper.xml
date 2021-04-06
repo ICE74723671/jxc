@@ -70,4 +70,33 @@
         </where>
     </select>
 
+    <insert id="saveDamageList" useGeneratedKeys="true" keyProperty="damageListId" parameterType="com.atguigu.jxc.entity.DamageList">
+        INSERT INTO
+        t_damage_list(damage_list_id,damage_number,damage_date,remarks,user_id)
+        VALUES
+        (#{damageListId},#{damageNumber},#{damageDate},
+        #{remarks},#{userId})
+    </insert>
+
+    <insert id="saveDamageListGoods" useGeneratedKeys="true" keyProperty="damageListGoodsId" parameterType="com.atguigu.jxc.entity.DamageListGoods">
+        INSERT INTO
+        t_damage_list_goods(damage_list_goods_id,goods_id,goods_code,
+        goods_name,goods_model,goods_unit,
+        goods_num,price,total,damage_list_id,goods_type_id)
+        VALUES
+        (#{damageListGoodsId},#{goodsId},#{goodsCode},
+        #{goodsName},#{goodsModel},#{goodsUnit},
+        #{goodsNum},#{price},#{total},#{damageListId},#{goodsTypeId})
+    </insert>
+
+    <update id="setDamageListGoodsId"
+            parameterType="com.atguigu.jxc.entity.DamageListGoods">
+        UPDATE
+        t_damage_list_goods
+        SET
+        damage_list_id = #{damageListId}
+        WHERE
+        damage_list_goods_id = #{damageListGoodsId}
+    </update>
+
 </mapper>
