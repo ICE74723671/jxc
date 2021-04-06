@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.jxc.dao.SupplierDao">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="supplier_id"
+            parameterType="com.atguigu.jxc.entity.Supplier">
+        INSERT INTO t_supplier
+        (supplier_name,contacts,phone_number,address,remarks)
+        VALUES (#{supplierName},#{contacts},#{phoneNumber},#{address},#{remarks})
+    </insert>
+
+    <update id="update" parameterType="com.atguigu.jxc.entity.Supplier">
+        UPDATE t_supplier
+        <set>
+            <if test="supplierName != '' and supplierName != null">
+            supplier_name= #{supplierName},
+            </if>
+            <if test="contacts != '' and contacts != null">
+                contacts = #{contacts},
+            </if>
+            <if test="phoneNumber != '' and phoneNumber != null">
+                phone_number =#{phoneNumber},
+            </if>
+            <if test="address != '' and address != null">
+            address= #{address},
+            </if>
+            <if test="remarks != '' and remarks != null">
+                remarks=#{remarks},
+            </if>
+        </set>
+        WHERE supplier_id=#{supplierId}
+    </update>
+
+    <delete id="delete" parameterType="java.util.List">
+        DELETE
+        FROM t_supplier
+        WHERE
+            supplier_id in
+        <foreach collection="ides" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="queryAllTotal" resultType="java.lang.String">
+        SELECT COUNT(1) FROM t_supplier
+    </select>
+
+
+    <!--    resultType="com.atguigu.jxc.entity.Supplier"-->
+    <resultMap id="SupplierResultMap" type="com.atguigu.jxc.entity.Supplier">
+        <result column="supplier_id" property="supplierId" jdbcType="INTEGER"/>
+        <result column="supplier_name" property="supplierName" jdbcType="VARCHAR"/>
+        <result column="contacts" property="contacts" jdbcType="VARCHAR"/>
+        <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="remarks" property="remarks" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryAllList" resultMap="SupplierResultMap">
+        SELECT supplier_id,supplier_name,contacts,phone_number,address,remarks
+        FROM
+        t_supplier
+        <where>
+            <if test="supplierName != null and supplierName != ''">
+                supplier_name LIKE concat('%',#{supplierName},'%')
+            </if>
+        </where>
+        LIMIT #{page},#{rows}
+    </select>
+
+    <select id="queryByName" resultMap="SupplierResultMap">
+        SELECT supplier_id,supplier_name,contacts,phone_number,address,remarks
+        FROM
+        t_supplier
+        WHERE
+        supplier_name=#{contacts}
+    </select>
+
+
+</mapper>
