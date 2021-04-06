@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.jxc.dao.OverflowListGoodsDao">
+
+    <resultMap id="overflowListGoodsMap" type="com.atguigu.jxc.entity.OverflowList">
+        <result column="overflow_list_id" property="overflowListId" jdbcType="INTEGER" />
+        <result column="overflow_number" property="overflowNumber" jdbcType="VARCHAR" />
+        <result column="overflow_date" property="overflowDate" jdbcType="VARCHAR" />
+        <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="INTEGER" />
+        <result column="true_name" property="trueName" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <resultMap id="goodsListMap" type="com.atguigu.jxc.entity.OverflowListGoods">
+        <result column="overflow_list_goods_id" property="overflowListGoodsId" jdbcType="INTEGER" />
+        <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+        <result column="goods_code" property="goodsCode" jdbcType="VARCHAR" />
+        <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+        <result column="goods_model" property="goodsModel" jdbcType="VARCHAR" />
+        <result column="goods_unit" property="goodsUnit" jdbcType="VARCHAR" />
+        <result column="goods_num" property="goodsNum" jdbcType="INTEGER" />
+        <result column="price" property="price" jdbcType="REAL" />
+        <result column="total" property="total" jdbcType="REAL" />
+        <result column="overflow_list_id" property="overflowListId" jdbcType="INTEGER" />
+        <result column="goods_type_id" property="goodsTypeId" jdbcType="INTEGER" />
+    </resultMap>
+
+    <select id="overflowListGoods" resultMap="overflowListGoodsMap">
+        SELECT
+        t1.overflow_list_id,
+        t1.overflow_number,
+        t1.overflow_date,
+        t1.remarks,
+        t1.user_id,
+        t2.true_name
+        FROM
+        t_overflow_list t1
+        left JOIN t_user t2
+        ON t1.user_id = t2.user_id
+        <where>
+        <if test="sTime != null and sTime !=''">
+        AND DATE_FORMAT(t1.overflow_date,'%Y-%m-%d') >= DATE_FORMAT(#{sTime},'%Y-%m-%d')
+        </if>
+        <if test="eTime != null and eTime != ''">
+        AND DATE_FORMAT(#{eTime},'%Y-%m-%d') >= DATE_FORMAT(t1.overflow_date,'%Y-%m-%d')
+        </if>
+        </where>
+    </select>
+
+    <select id="goodsList" resultMap="goodsListMap">
+        SELECT
+        overflow_list_goods_id,
+        goods_id,
+        goods_code,
+        goods_name,
+        goods_model,
+        goods_unit,
+        goods_num,
+        price,
+        total,
+        overflow_list_id,
+        goods_type_id
+        FROM
+        t_overflow_list_goods
+        <where>
+        overflow_list_goods_id = #{overflowListId}
+        </where>
+    </select>
+
+</mapper>

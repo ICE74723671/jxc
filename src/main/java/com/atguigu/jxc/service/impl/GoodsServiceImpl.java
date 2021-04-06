@@ -1,21 +1,14 @@
 package com.atguigu.jxc.service.impl;
 
 import com.atguigu.jxc.dao.GoodsDao;
-import com.atguigu.jxc.domain.ErrorCode;
 import com.atguigu.jxc.domain.ServiceVO;
 import com.atguigu.jxc.domain.SuccessCode;
 import com.atguigu.jxc.entity.Goods;
-import com.atguigu.jxc.entity.Log;
-import com.atguigu.jxc.service.CustomerReturnListGoodsService;
 import com.atguigu.jxc.service.GoodsService;
-import com.atguigu.jxc.service.LogService;
-import com.atguigu.jxc.service.SaleListGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @description
@@ -44,6 +37,23 @@ public class GoodsServiceImpl implements GoodsService {
 
         }
         return new ServiceVO<>(SuccessCode.SUCCESS_CODE, SuccessCode.SUCCESS_MESS, unitCode);
+    }
+
+    @Override
+    public List<Goods> listInventory(Integer page, Integer rows, String codeOrName, Integer goodsTypeId) {
+        int pages = (page - 1)*rows;
+         return goodsDao.listInventory(pages,rows,codeOrName,goodsTypeId);
+
+    }
+
+    @Override
+    public List<Goods> goodsList(Integer page, Integer rows, String goodsName, Integer goodsTypeId) {
+        return goodsDao.goodsList(page,rows,goodsName,goodsTypeId);
+    }
+
+    @Override
+    public List<Goods> listAlarm() {
+        return goodsDao.listAlarm();
     }
 
 

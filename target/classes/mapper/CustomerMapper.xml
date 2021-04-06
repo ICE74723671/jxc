@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.jxc.dao.CustomerDao">
+
+    <resultMap id="customerListMap" type="com.atguigu.jxc.entity.Customer">
+        <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
+        <result column="customer_name" property="customerName" jdbcType="VARCHAR"/>
+        <result column="contacts" property="contacts" jdbcType="VARCHAR"/>
+        <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="remarks" property="remarks" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="customerList" resultMap="customerListMap">
+        SELECT
+        customer_id,
+        customer_name,
+        contacts,
+        phone_number,
+        address,
+        remarks
+        FROM
+        t_customer
+        <where>
+            <if test="customerName != null and customerName != ''">
+                and customer_name like concat('%',#{customerName},'%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.atguigu.jxc.entity.Customer">
+        INSERT
+        INTO
+        t_customer
+        (customer_name,
+        contacts,
+        phone_number,
+        address,
+        remarks
+        )
+        values
+        (
+        #{customerName},
+        #{contacts},
+        #{phoneNumber},
+        #{address},
+        #{remarks}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.atguigu.jxc.entity.Customer">
+        update
+        t_customer
+        set
+        customer_name = #{customerName},
+        contacts = #{contacts},
+        phone_number = #{phoneNumber},
+        address = #{address},
+        remarks = #{remarks}
+        <where>
+        customer_id = #{customerId}
+        </where>
+    </update>
+
+    <delete id="delete">
+        delete
+        from
+        t_customer
+        <where>
+        customer_id in
+        <foreach collection="ides" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+        </where>
+    </delete>
+
+
+</mapper>

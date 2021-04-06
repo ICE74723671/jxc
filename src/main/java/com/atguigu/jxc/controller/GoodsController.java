@@ -3,18 +3,21 @@ package com.atguigu.jxc.controller;
 import com.atguigu.jxc.domain.ServiceVO;
 import com.atguigu.jxc.entity.Goods;
 import com.atguigu.jxc.service.GoodsService;
-import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * @description 商品信息Controller
  */
+@RestController
+@RequestMapping("goods")
 public class GoodsController {
 
     @Autowired
@@ -28,6 +31,17 @@ public class GoodsController {
      * @param goodsTypeId 商品类别ID
      * @return
      */
+    @PostMapping("listInventory")
+    public Map<String,Object> listInventory(Integer page, Integer rows, String codeOrName, Integer goodsTypeId){
+        List<Goods> goods = goodsService.listInventory(page,rows,codeOrName,goodsTypeId);
+        int size = goods.size();
+        System.out.println("size = " + size);
+        Map<String,Object> map = new HashMap<>();
+        map.put("rows",goods);
+        map.put("total",size);
+
+          return map;
+    }
 
 
     /**
@@ -38,6 +52,15 @@ public class GoodsController {
      * @param goodsTypeId 商品类别ID
      * @return
      */
+    @PostMapping("list")
+    public Map<String,Object> goodsList(Integer page, Integer rows, String goodsName, Integer goodsTypeId){
+        Map<String,Object> map = new HashMap<>();
+        List<Goods> goods = goodsService.goodsList(page,rows,goodsName,goodsTypeId);
+        int size = goods.size();
+        map.put("total",size);
+        map.put("rows",goods);
+        return map;
+    }
 
 
     /**
@@ -98,5 +121,12 @@ public class GoodsController {
      * 查询库存报警商品信息
      * @return
      */
+    @PostMapping("listAlarm")
+    public Map<String,Object> listAlarm(){
+        Map<String,Object> map = new HashMap<>();
+        List<Goods> goods = goodsService.listAlarm();
+        map.put("rows",goods);
+        return map;
+    }
 
 }
