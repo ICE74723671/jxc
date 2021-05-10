@@ -36,4 +36,12 @@ public interface GoodsDao {
     List<Goods> listAlarm();
 
     List<Goods> listInventory(@Param("pages") Integer pages, @Param("rows") Integer rows, @Param("codeOrName") String codeOrName, @Param("goodsTypeId") Integer goodsTypeId);
+
+    List<Goods> getNoInventoryQuantity(String value);
+
+    List<Goods> getHasInventoryQuantity(String nameOrCode);
+
+    void saveStock(@Param("goodsId")Integer goodsId, @Param("inventoryQuantity")Integer inventoryQuantity, @Param("purchasingPrice")double purchasingPrice);
+
+    Integer deleteStock(Integer goodsId);
 }

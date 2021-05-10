@@ -25,6 +25,54 @@ public class GoodsController {
     private GoodsService goodsService;
 
     /**
+     * 删除库存
+     * @param goodsId
+     * @return
+     */
+    @PostMapping("goods/deleteStock")
+    public ServiceVO deleteStock(Integer goodsId){
+        return goodsService.deleteStock(goodsId);
+    }
+
+    /**
+     * 添加库存、修改数量或成本价
+     * @param goodsId
+     * @param inventoryQuantity
+     * @param purchasingPrice
+     * @return
+     */
+    @PostMapping("goods/saveStock")
+    public ServiceVO saveStock(Integer goodsId,Integer inventoryQuantity,double purchasingPrice) {
+        return goodsService.saveStock(goodsId,inventoryQuantity,purchasingPrice);
+    }
+
+    /**
+     * 有库存商品列表展示
+     *
+     * @param page
+     * @param rows
+     * @param nameOrCode
+     * @return
+     */
+    @PostMapping("goods/getHasInventoryQuantity")
+    public GoodsVo getHasInventoryQuantity(Integer page, Integer rows, String nameOrCode) {
+        return goodsService.getHasInventoryQuantity(nameOrCode);
+    }
+
+    /**
+     * 无库存商品列表展示
+     *
+     * @param page
+     * @param rows
+     * @param nameOrCode
+     * @return
+     */
+    @PostMapping("goods/getNoInventoryQuantity")
+    public GoodsVo getNoInventoryQuantity(Integer page, Integer rows, String nameOrCode) {
+        return goodsService.getNoInventoryQuantity(nameOrCode);
+    }
+
+    /**
      * 删除商品
      *
      * @param goodsId
@@ -108,20 +156,21 @@ public class GoodsController {
 
     /**
      * 分页查询商品库存信息
-     * @param page 当前页
-     * @param rows 每页显示条数
-     * @param codeOrName 商品编码或名称
+     *
+     * @param page        当前页
+     * @param rows        每页显示条数
+     * @param codeOrName  商品编码或名称
      * @param goodsTypeId 商品类别ID
      * @return
      */
     @PostMapping("goods/listInventory")
-    public Map<String,Object> listInventory(Integer page, Integer rows, String codeOrName, Integer goodsTypeId){
-        List<Goods> goods = goodsService.listInventory(page,rows,codeOrName,goodsTypeId);
+    public Map<String, Object> listInventory(Integer page, Integer rows, String codeOrName, Integer goodsTypeId) {
+        List<Goods> goods = goodsService.listInventory(page, rows, codeOrName, goodsTypeId);
         int size = goods.size();
         System.out.println("size = " + size);
-        Map<String,Object> map = new HashMap<>();
-        map.put("rows",goods);
-        map.put("total",size);
+        Map<String, Object> map = new HashMap<>();
+        map.put("rows", goods);
+        map.put("total", size);
 
         return map;
     }
@@ -194,13 +243,14 @@ public class GoodsController {
 
     /**
      * 查询库存报警商品信息
+     *
      * @return
      */
     @PostMapping("goods/listAlarm")
-    public Map<String,Object> listAlarm(){
-        Map<String,Object> map = new HashMap<>();
+    public Map<String, Object> listAlarm() {
+        Map<String, Object> map = new HashMap<>();
         List<Goods> goods = goodsService.listAlarm();
-        map.put("rows",goods);
+        map.put("rows", goods);
         return map;
     }
 

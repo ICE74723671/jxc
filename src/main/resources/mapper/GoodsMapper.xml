@@ -279,6 +279,75 @@
         </where>
     </select>
 
+    <select id="getNoInventoryQuantity" resultMap="BaseResultMap">
+        SELECT
+            good.goods_id ,
+            good.goods_code ,
+            good.goods_name ,
+            good.inventory_quantity ,
+            good.last_purchasing_price ,
+            good.min_num ,
+            good.goods_model ,
+            good.goods_producer ,
+            good.purchasing_price ,
+            good.remarks ,
+            good.selling_price ,
+            good.state ,
+            good.goods_unit ,
+            good.goods_type_id ,
+            type.goods_type_name ,
+            sale.total
+        FROM
+            t_goods good
+        LEFT JOIN t_sale_list_goods sale ON good.goods_id = sale.goods_id
+        LEFT JOIN t_goods_type type ON good.goods_type_id = type.goods_type_id
+        <where>
+                good.inventory_quantity = 0
+            <if test="value!=null and value.length>0">
+                and good.goods_name LIKE CONCAT('%', #{value} ,'%')
+            </if>
+        </where>
+    </select>
 
+    <select id="getHasInventoryQuantity" resultMap="BaseResultMap">
+        SELECT
+        good.goods_id ,
+        good.goods_code ,
+        good.goods_name ,
+        good.inventory_quantity ,
+        good.last_purchasing_price ,
+        good.min_num ,
+        good.goods_model ,
+        good.goods_producer ,
+        good.purchasing_price ,
+        good.remarks ,
+        good.selling_price ,
+        good.state ,
+        good.goods_unit ,
+        good.goods_type_id ,
+        type.goods_type_name ,
+        sale.total
+        FROM
+        t_goods good
+        LEFT JOIN t_sale_list_goods sale ON good.goods_id = sale.goods_id
+        LEFT JOIN t_goods_type type ON good.goods_type_id = type.goods_type_id
+        <where>
+            good.inventory_quantity != 0
+            <if test="value!=null and value.length>0">
+                and good.goods_name LIKE CONCAT('%', #{value} ,'%')
+            </if>
+        </where>
+    </select>
+
+    <update id="saveStock">
+        update t_goods
+        set inventory_quantity = #{inventoryQuantity}, purchasing_price = #{purchasingPrice}
+        where goods_id = #{goodsId}
+    </update>
+
+    <delete id="deleteStock">
+        DELETE FROM t_goods
+        WHERE goods_id = #{goodsId} and state = 0
+    </delete>
 
 </mapper>

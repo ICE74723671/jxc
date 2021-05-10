@@ -12,15 +12,19 @@ import com.atguigu.jxc.entity.Unit;
 import com.atguigu.jxc.service.GoodsService;
 import com.atguigu.jxc.vo.GoodsTypeVo;
 import com.atguigu.jxc.vo.GoodsVo;
+import com.sun.corba.se.impl.oa.toa.TOA;
+import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.swing.text.TabableView;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
 /**
@@ -46,9 +50,49 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
+    public GoodsVo getNoInventoryQuantity(String nameOrCode) {
+        GoodsVo goodsVo = new GoodsVo();
+        List<Goods> rows = goodsDao.getNoInventoryQuantity(nameOrCode);
+        Integer total = rows.size();
+        goodsVo.setTotal(total);
+        goodsVo.setRows(rows);
+        return goodsVo;
+    }
+
+    @Override
+    public GoodsVo getHasInventoryQuantity(String nameOrCode) {
+        GoodsVo goodsVo = new GoodsVo();
+        List<Goods> rows = goodsDao.getHasInventoryQuantity(nameOrCode);
+        Integer total = rows.size();
+        goodsVo.setTotal(total);
+        goodsVo.setRows(rows);
+        return goodsVo;
+    }
+
+    @Override
+    public ServiceVO saveStock(Integer goodsId, Integer inventoryQuantity, double purchasingPrice) {
+        try {
+            goodsDao.saveStock(goodsId, inventoryQuantity, purchasingPrice);
+            return new ServiceVO<>(SuccessCode.SUCCESS_CODE, SuccessCode.SUCCESS_MESS);
+        } catch (Exception e) {
+            return new ServiceVO<>(ErrorCode.REQ_ERROR_CODE, ErrorCode.REQ_ERROR_MESS);
+        }
+    }
+
+    @Override
+    public ServiceVO deleteStock(Integer goodsId) {
+        Integer result = goodsDao.deleteStock(goodsId);
+        if (result == 0) {
+            return new ServiceVO<>(ErrorCode.STORED_ERROR_CODE, ErrorCode.STORED_ERROR_MESS);
+        }
+        return new ServiceVO<>(SuccessCode.SUCCESS_CODE, SuccessCode.SUCCESS_MESS);
+
+    }
+
+    @Override
     public List<Goods> listInventory(Integer page, Integer rows, String codeOrName, Integer goodsTypeId) {
-        int pages = (page - 1)*rows;
-        return goodsDao.listInventory(pages,rows,codeOrName,goodsTypeId);
+        int pages = (page - 1) * rows;
+        return goodsDao.listInventory(pages, rows, codeOrName, goodsTypeId);
 
     }
 

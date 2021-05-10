@@ -6,7 +6,6 @@ import java.math.BigDecimal;
  * @description 数学工具类
  */
 public class BigDecimalUtil {
-
     /**
      * 保留两位小数
      * @param marth 需要处理的数据

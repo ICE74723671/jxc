@@ -31,4 +31,12 @@ public interface GoodsService {
     List<Goods> listInventory(Integer page, Integer rows, String codeOrName, Integer goodsTypeId);
 
     List<Goods> listAlarm();
+
+    GoodsVo getNoInventoryQuantity(String nameOrCode);
+
+    GoodsVo getHasInventoryQuantity(String nameOrCode);
+
+    ServiceVO saveStock(Integer goodsId, Integer inventoryQuantity, double purchasingPrice);
+
+    ServiceVO deleteStock(Integer goodsId);
 }
